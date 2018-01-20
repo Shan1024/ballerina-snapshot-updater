@@ -1,0 +1,25 @@
+From 201c7c18d060f0ef9b3f126f89908f1d5d5cd52c Mon Sep 17 00:00:00 2001
+From: shan1024 <shanm@wso2.com>
+Date: Mon, 15 Jan 2018 17:39:15 +0530
+Subject: [PATCH] Revert property value
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index 6af7f8a..b8a3ba2 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -107,7 +107,7 @@
+     </build>
+ 
+     <properties>
+-        <ballerina.version>0.95.8-SNAPSHOT</ballerina.version>
++        <ballerina.version>${project.version}</ballerina.version>
+         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
+         <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
+         <lsp4j.version>0.3.0</lsp4j.version>
+-- 
+2.7.4
+

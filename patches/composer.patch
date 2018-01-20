@@ -1,0 +1,51 @@
+From 7cb41df898baf6f3d134fa917c8602c0cc70556e Mon Sep 17 00:00:00 2001
+From: shan1024 <shanm@wso2.com>
+Date: Mon, 15 Jan 2018 17:19:26 +0530
+Subject: [PATCH 1/2] Revert propery value
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index c8b9c4e..9a75e12 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -156,7 +156,7 @@
+     </build>
+ 
+     <properties>
+-        <ballerina.version>0.95.8-SNAPSHOT</ballerina.version>
++        <ballerina.version>${project.version}</ballerina.version>
+         <msf4j.examples.version>2.1.0</msf4j.examples.version>
+         <antlr.maven.plugin.version>4.5.1</antlr.maven.plugin.version>
+         <maven.checkstyleplugin.excludes>**/parser/*,**/${native.constructs.provider.class}.java</maven.checkstyleplugin.excludes>
+-- 
+2.7.4
+
+
+From 7f38df574f1d97c68436b81c6bc0680a1efa29c1 Mon Sep 17 00:00:00 2001
+From: shan1024 <shanm@wso2.com>
+Date: Mon, 15 Jan 2018 17:27:28 +0530
+Subject: [PATCH 2/2] Revert symbol
+
+---
+ modules/web/src/plugins/help/dialogs/about-dialog.jsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules/web/src/plugins/help/dialogs/about-dialog.jsx b/modules/web/src/plugins/help/dialogs/about-dialog.jsx
+index a78cac3..59daee3 100644
+--- a/modules/web/src/plugins/help/dialogs/about-dialog.jsx
++++ b/modules/web/src/plugins/help/dialogs/about-dialog.jsx
+@@ -72,7 +72,7 @@ class AboutDialog extends React.Component {
+                 className="modal-about"
+                 actions={
+                     <div>
+-                        ?? {new Date().getFullYear()}
++                        © {new Date().getFullYear()}
+                         &nbsp;
+                         <a
+                             href="http://wso2.com/"
+-- 
+2.7.4
+

@@ -1,0 +1,25 @@
+From 91a3873a1b0869cbf13f789a006e279357c18355 Mon Sep 17 00:00:00 2001
+From: shan1024 <shanm@wso2.com>
+Date: Mon, 15 Jan 2018 17:37:15 +0530
+Subject: [PATCH] Revert property value
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index e316709..f1348c2 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -159,7 +159,7 @@
+     </build>
+ 
+     <properties>
+-        <ballerina.version>0.95.8-SNAPSHOT</ballerina.version>
++        <ballerina.version>${project.version}</ballerina.version>
+         <project.scm.id>my-scm-server</project.scm.id>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     </properties>
+-- 
+2.7.4
+

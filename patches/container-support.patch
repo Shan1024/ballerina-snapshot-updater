@@ -1,0 +1,25 @@
+From 031b328d45dec71037222e3e529150590a7a4313 Mon Sep 17 00:00:00 2001
+From: shan1024 <shanm@wso2.com>
+Date: Mon, 15 Jan 2018 17:34:48 +0530
+Subject: [PATCH 1/2] Revert property tag
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index df81ad2..6408a07 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -295,7 +295,7 @@
+ 
+     <properties>
+         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
+-        <ballerina.launcher.version>0.95.8-SNAPSHOT</ballerina.launcher.version>
++        <ballerina.launcher.version>${project.version}</ballerina.launcher.version>
+         <surefireArgLine>-Dfile.encoding=UTF-8</surefireArgLine>
+         <jackson.version>2.6.1</jackson.version>
+         <replacer.plugin.version>1.5.3</replacer.plugin.version>
+-- 
+2.7.4
+
