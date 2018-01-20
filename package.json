@@ -1,10 +1,10 @@
 {
-  "name": "ballerina-manager",
+  "name": "ballerina-snapshot-updater",
   "version": "0.1.0",
-  "description": "Makes snapshot version updating easier by updating release branch",
+  "description": "Makes snapshot version updating easier by updating release branch and sending pull requests",
   "main": "app/app.js",
   "scripts": {
-    "manager": "node app/app.js",
+    "updater": "node app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "shan1024",
