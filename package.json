@@ -1,0 +1,17 @@
+{
+  "name": "ballerina-manager",
+  "version": "0.1.0",
+  "description": "Makes snapshot version updating easier by updating release branch",
+  "main": "app/app.js",
+  "scripts": {
+    "manager": "node app/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shan1024",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "inquirer": "^5.0.0",
+    "shelljs": "^0.8.0"
+  }
+}
