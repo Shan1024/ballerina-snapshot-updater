@@ -9,7 +9,7 @@ Makes snapshot version updating in Ballerina repos easier by updating release br
 You need following applications to run the BSU.
 
 1. [git](https://git-scm.com/downloads)
-2. [hub](https://hub.github.com)
+2. [hub](https://hub.github.com) (Not needed at this moment since sending PRs is disabled)
 3. [node + npm](https://nodejs.org/en/download/)
 4. Other tools which needs to build repos mentioned below.
 5. Clone required repos (mentioned below) to `sources/` directory in this repo. Make sure to add `origin` and `upstream` correctly. Recommended way is to add a symlink named `sources` to the directory containing already cloned repos using following command.

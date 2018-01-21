@@ -101,10 +101,11 @@ inquirer
             return;
         }
 
-        if (answers.createPullRequests && !shell.which('hub')) {
-            shell.echo(chalk.red("Sorry, this tool requires 'hub' (https://hub.github.com)."));
-            return;
-        }
+        // Todo - Enable 'hub' later
+        // if (answers.createPullRequests && !shell.which('hub')) {
+        //     shell.echo(chalk.red("Sorry, this tool requires 'hub' (https://hub.github.com)."));
+        //     return;
+        // }
 
         for (let i = 0; i < answers.repositories.length; i++) {
             processRepo(answers.repositories[i], answers.version, answers.createPullRequests);
