@@ -216,10 +216,31 @@ let buildRepo = function (skipTests) {
     return executeCommand(command);
 };
 
+// Todo
+// let openInBrowser = function (url) {
+//     if (shell.which('google-chrome')) {
+//         executeCommand("google-chrome " + url);
+//         return;
+//     }
+//     if (shell.which('firefox')) {
+//         executeCommand("firefox " + url);
+//         return;
+//     }
+//     console.log(chalk.yellow("\nCould not find a browser to open url: ") + chalk.bold.yellow(url));
+// };
+//
+
+// Todo
 let createPullRequest = function (message) {
-    console.log(chalk.blue("\nCreating pull request: ") + chalk.bold.blue(message));
-    let command = `git pull-request -m "${message}"`;
-    executeCommand(command);
+    // console.log(chalk.blue("\nCreating pull request: ") + chalk.bold.blue(message));
+    // let command = `hub pull-request -m "${message}"`;
+    // let response = shell.exec(command, {async: true});
+    // if (response.code !== 0) {
+    //     console.log(chalk.red("Error occurred while creating the pull request."));
+    //     return;
+    // }
+    // openInBrowser(response.stdout);
+    console.log(chalk.yellow("\nCreating pull request is not yet supported."));
 };
 
 let processCommonRepo = function (repository, version, createPullRequests) {
@@ -343,10 +364,10 @@ let buildRequiredRepo = function (repository, version) {
 };
 
 let processContainerSupportRepo = function (repository, version, createPullRequests) {
-    if(!buildRequiredRepo("ballerina-parent",version)){
+    if (!buildRequiredRepo("ballerina-parent", version)) {
         return;
     }
-    if(!buildRequiredRepo("ballerina",version)){
+    if (!buildRequiredRepo("ballerina", version)) {
         return;
     }
     if (!checkSourceDirectory(SOURCE_ROOT)) {
