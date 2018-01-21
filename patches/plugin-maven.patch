@@ -15,7 +15,7 @@ index b398bd6..768130a 100644
  
    <properties>
      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
--    <docerina.version>0.95.8-SNAPSHOT</docerina.version>
+-    <docerina.version>0.95.10-SNAPSHOT</docerina.version>
 +    <docerina.version>${project.version}</docerina.version>
    </properties>
  

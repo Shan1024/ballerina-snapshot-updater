@@ -15,7 +15,7 @@ index 6af7f8a..b8a3ba2 100644
      </build>
  
      <properties>
--        <ballerina.version>0.95.8-SNAPSHOT</ballerina.version>
+-        <ballerina.version>0.95.10-SNAPSHOT</ballerina.version>
 +        <ballerina.version>${project.version}</ballerina.version>
          <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
          <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
