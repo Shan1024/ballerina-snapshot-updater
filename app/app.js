@@ -29,7 +29,7 @@ const WELCOME_MSG = ` _           _ _           _
 #########################################\n`;
 console.log(chalk.bold.blue(WELCOME_MSG));
 
-console.log(chalk.yellow("Makes snapshot version updating easier by updating release branch :)\n"));
+console.log(chalk.yellow("Makes snapshot version updating easier by updating release branch and sending pull requests :)\n"));
 
 inquirer
     .prompt([
@@ -96,12 +96,12 @@ inquirer
     .then(answers => {
         // console.log(JSON.stringify(answers, null, '  '));
         if (!shell.which('git')) {
-            shell.echo(chalk.red("Sorry, this script requires 'git' (https://git-scm.com/downloads)."));
+            shell.echo(chalk.red("Sorry, this tool requires 'git' (https://git-scm.com/downloads)."));
             return;
         }
 
         if (answers.createPullRequests && !shell.which('hub')) {
-            shell.echo(chalk.red("Sorry, this script requires 'hub' (https://hub.github.com)."));
+            shell.echo(chalk.red("Sorry, this tool requires 'hub' (https://hub.github.com)."));
             return;
         }
 
@@ -145,8 +145,20 @@ let processRepo = function (repository, version, createPullRequests) {
 let executeCommand = function (command) {
     let response = shell.exec(command);
     if (response.code !== 0) {
-        console.log(chalk.bold.red(command) + chalk.red(" failed. Skipping the repository."));
+        console.log(chalk.bold.red(command) + chalk.red(" failed. Skipping processing current repository."));
         return false;
+    }
+    return true;
+};
+
+let checkSourceDirectory = function (source) {
+    let response = shell.cd(source);
+    if (response.code !== 0) {
+        response = shell.mkdir(source);
+        if (response.code !== 0) {
+            return false;
+        }
+        return shell.cd(source).code === 0;
     }
     return true;
 };
@@ -200,8 +212,17 @@ let createPullRequest = function (message) {
 };
 
 let processLanguageServer = function (version, createPullRequests) {
-    shell.cd(SOURCE_ROOT);
-    shell.cd(LANGUAGE_SERVER);
+    if (!checkSourceDirectory(SOURCE_ROOT)) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
+            + chalk.red(" directory. View README for more details."));
+        return;
+    }
+    if (shell.cd(LANGUAGE_SERVER).code !== 0) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(LANGUAGE_SERVER) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone ") + chalk.bold.red(LANGUAGE_SERVER) + chalk.red(" repo."));
+        return;
+    }
 
     const RELEASE_BRANCH = `release-${version}`;
     const PATCH_LOCATION = `${PATCH_ROOT}/${LANGUAGE_SERVER}.patch`;
@@ -230,6 +251,7 @@ let processLanguageServer = function (version, createPullRequests) {
     if (createPullRequests) {
         createPullRequest("Revert property values");
     }
+    console.log(chalk.green("\nProcessing ") + chalk.bold.green(LANGUAGE_SERVER) + chalk.green(" completed successfully."))
 };
 
 let processDocerina = function (version, createPullRequests) {
