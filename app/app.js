@@ -176,13 +176,13 @@ let checkoutBranch = function (branch) {
 
 let checkPatch = function (location) {
     console.log(chalk.blue("\nChecking patch: ") + chalk.bold.blue(location));
-    let command = `git apply --check ${location}`;
+    let command = `git apply --check ${location} -v`;
     return executeCommand(command);
 };
 
 let applyPatch = function (location) {
     console.log(chalk.blue("\nApplying patch: ") + chalk.bold.blue(location));
-    let command = `git apply ${location}`;
+    let command = `git apply ${location} -v`;
     return executeCommand(command);
 };
 
@@ -192,9 +192,12 @@ let stageFile = function (file) {
     return executeCommand(command);
 };
 
-let commitChanges = function (message) {
+let commitChanges = function (message, noVerify) {
     console.log(chalk.blue(`\nCommitting changes`));
     let command = `git commit -m "${message}"`;
+    if (noVerify) {
+        command += " --no-verify";
+    }
     return executeCommand(command);
 };
 
@@ -204,13 +207,22 @@ let pushChanges = function (branch) {
     return executeCommand(command);
 };
 
+let buildRepo = function (skipTests) {
+    let command = `mvn clean install`;
+    if (skipTests) {
+        command += " -Dcheckstyle.skip=true -Dfindbugs.skip=true -DskipTests"
+    }
+    console.log(chalk.blue("\nBuilding repo: ") + chalk.bold.blue(command));
+    return executeCommand(command);
+};
+
 let createPullRequest = function (message) {
     console.log(chalk.blue("\nCreating pull request: ") + chalk.bold.blue(message));
     let command = `git pull-request -m "${message}"`;
     executeCommand(command);
 };
 
-let processLanguageServer = function (repository, version, createPullRequests) {
+let processCommonRepo = function (repository, version, createPullRequests) {
     if (!checkSourceDirectory(SOURCE_ROOT)) {
         console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
         console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
@@ -241,7 +253,7 @@ let processLanguageServer = function (repository, version, createPullRequests) {
     if (!stageFile("pom.xml")) {
         return;
     }
-    if (!commitChanges(COMMIT_MSG)) {
+    if (!commitChanges(COMMIT_MSG, false)) {
         return;
     }
     if (!pushChanges(RELEASE_BRANCH)) {
@@ -250,33 +262,178 @@ let processLanguageServer = function (repository, version, createPullRequests) {
     if (createPullRequests) {
         createPullRequest(PR_MSG);
     }
-    console.log(chalk.green("\nProcessing ") + chalk.bold.green(repository) + chalk.green(" completed successfully."))
+    console.log(chalk.green("\nProcessing ") + chalk.bold.green(repository) + chalk.green(" completed successfully."));
+};
+
+let processComposerRepo = function (repository, version, createPullRequests) {
+    if (!checkSourceDirectory(SOURCE_ROOT)) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
+            + chalk.red(" directory. View README for more details."));
+        return;
+    }
+    if (shell.cd(repository).code !== 0) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(repository) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone ") + chalk.bold.red(repository) + chalk.red(" repo."));
+        return;
+    }
+
+    const RELEASE_BRANCH = `release-${version}`;
+    const PATCH_LOCATION = `${PATCH_ROOT}/${repository}.patch`;
+
+    if (!fetchUpstream()) {
+        return;
+    }
+    if (!checkoutBranch(RELEASE_BRANCH)) {
+        return;
+    }
+    if (!checkPatch(PATCH_LOCATION)) {
+        return;
+    }
+    if (!applyPatch(PATCH_LOCATION)) {
+        return;
+    }
+    if (!stageFile("pom.xml")) {
+        return;
+    }
+    if (!commitChanges(COMMIT_MSG, false)) {
+        return;
+    }
+    if (!stageFile("modules/web/src/plugins/help/dialogs/about-dialog.jsx")) {
+        return;
+    }
+    if (!commitChanges("Revert symbol", true)) {
+        return;
+    }
+    if (!pushChanges(RELEASE_BRANCH)) {
+        return;
+    }
+    if (createPullRequests) {
+        createPullRequest(PR_MSG);
+    }
+    console.log(chalk.green("\nProcessing ") + chalk.bold.green(repository) + chalk.green(" completed successfully."));
+};
+
+let buildRequiredRepo = function (repository, version) {
+    if (!checkSourceDirectory(SOURCE_ROOT)) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
+            + chalk.red(" directory. View README for more details."));
+        return;
+    }
+    if (shell.cd(repository).code !== 0) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(repository) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone ") + chalk.bold.red(repository) + chalk.red(" repo."));
+        return;
+    }
+
+    const RELEASE_BRANCH = `release-${version}`;
+
+    if (!fetchUpstream()) {
+        return;
+    }
+    if (!checkoutBranch(RELEASE_BRANCH)) {
+        return;
+    }
+    if (!buildRepo(true)) {
+        return;
+    }
+    console.log(chalk.green("\nRepo ") + chalk.bold.green(repository) + chalk.green(" built successfully."));
+    return true;
+};
+
+let processContainerSupportRepo = function (repository, version, createPullRequests) {
+    if(!buildRequiredRepo("ballerina-parent",version)){
+        return;
+    }
+    if(!buildRequiredRepo("ballerina",version)){
+        return;
+    }
+    if (!checkSourceDirectory(SOURCE_ROOT)) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
+            + chalk.red(" directory. View README for more details."));
+        return;
+    }
+    if (shell.cd(repository).code !== 0) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(repository) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone ") + chalk.bold.red(repository) + chalk.red(" repo."));
+        return;
+    }
+
+    const RELEASE_BRANCH = `release-${version}`;
+    const PATCH_LOCATION = `${PATCH_ROOT}/${repository}.patch`;
+
+    if (!fetchUpstream()) {
+        return;
+    }
+    if (!checkoutBranch(RELEASE_BRANCH)) {
+        return;
+    }
+    if (!checkPatch(PATCH_LOCATION)) {
+        return;
+    }
+    if (!applyPatch(PATCH_LOCATION)) {
+        return;
+    }
+    if (!stageFile("pom.xml")) {
+        return;
+    }
+    if (!commitChanges(COMMIT_MSG, false)) {
+        return;
+    }
+    if (!buildRepo(false)) {
+        return;
+    }
+    if (!stageFile("README.md")) {
+        return;
+    }
+    if (!stageFile("ballerina-base-image/README.md")) {
+        return;
+    }
+    if (!stageFile("ballerina-base-image/build.sh")) {
+        return;
+    }
+    if (!commitChanges("Update version in files", false)) {
+        return;
+    }
+    if (!pushChanges(RELEASE_BRANCH)) {
+        return;
+    }
+    if (createPullRequests) {
+        createPullRequest(PR_MSG);
+    }
+    console.log(chalk.green("\nProcessing ") + chalk.bold.green(repository) + chalk.green(" completed successfully."));
+};
+
+let processLanguageServer = function (repository, version, createPullRequests) {
+    processCommonRepo(repository, version, createPullRequests);
 };
 
 let processDocerina = function (repository, version, createPullRequests) {
-    console.log("processDocerina");
+    processCommonRepo(repository, version, createPullRequests);
 };
 
 let processPluginMaven = function (repository, version, createPullRequests) {
-    console.log("processPluginMaven");
+    processCommonRepo(repository, version, createPullRequests);
 };
 
 let processComposer = function (repository, version, createPullRequests) {
-    console.log("processComposer");
+    processComposerRepo(repository, version, createPullRequests);
 };
 
 let processTesterina = function (repository, version, createPullRequests) {
-    console.log("processTesterina");
+    processCommonRepo(repository, version, createPullRequests);
 };
 
 let processContainerSupport = function (repository, version, createPullRequests) {
-    console.log("processContainerSupport");
+    processContainerSupportRepo(repository, version, createPullRequests);
 };
 
 let processToolsSwaggerBallerina = function (repository, version, createPullRequests) {
-    console.log("processToolsSwaggerBallerina");
+    processCommonRepo(repository, version, createPullRequests);
 };
 
 let processToolsDistribution = function (repository, version, createPullRequests) {
-    console.log("processToolsDistribution");
+    processCommonRepo(repository, version, createPullRequests);
 };
