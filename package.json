@@ -1,7 +1,7 @@
 {
   "name": "ballerina-snapshot-updater",
   "version": "0.1.0",
-  "description": "Makes snapshot version updating easier by updating release branch and sending pull requests",
+  "description": "Makes snapshot version updating in Ballerina repos easier",
   "main": "app/app.js",
   "scripts": {
     "updater": "node app/app.js",
