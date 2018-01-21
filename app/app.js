@@ -16,6 +16,7 @@ const TOOL_SWAGGER_BALLERINA = "tool-swagger-ballerina";
 const TOOLS_DISTRIBUTION = "tools-distribution";
 
 const COMMIT_MSG = "Revert property value";
+const PR_MSG = "Merge release branch";
 
 const WELCOME_MSG = ` _           _ _           _             
 | |         | | |         (_)            
@@ -29,7 +30,7 @@ const WELCOME_MSG = ` _           _ _           _
 #########################################\n`;
 console.log(chalk.bold.blue(WELCOME_MSG));
 
-console.log(chalk.yellow("Makes snapshot version updating easier by updating release branch and sending pull requests :)\n"));
+console.log(chalk.yellow("Makes snapshot version updating easier in Ballerina repos :)\n"));
 
 inquirer
     .prompt([
@@ -111,33 +112,31 @@ inquirer
     });
 
 let processRepo = function (repository, version, createPullRequests) {
-
     console.log(chalk.blue("\nProcessing ") + chalk.bold.blue(repository));
-
     switch (repository) {
         case LANGUAGE_SERVER:
-            processLanguageServer(version, createPullRequests);
+            processLanguageServer(repository, version, createPullRequests);
             break;
         case DOCERINA:
-            processDocerina(version, createPullRequests);
+            processDocerina(repository, version, createPullRequests);
             break;
         case PLUGIN_MAVEN:
-            processPluginMaven(version, createPullRequests);
+            processPluginMaven(repository, version, createPullRequests);
             break;
         case COMPOSER:
-            processComposer(version, createPullRequests);
+            processComposer(repository, version, createPullRequests);
             break;
         case TESTERINA:
-            processTesterina(version, createPullRequests);
+            processTesterina(repository, version, createPullRequests);
             break;
         case CONTAINER_SUPPORT:
-            processContainerSupport(version, createPullRequests);
+            processContainerSupport(repository, version, createPullRequests);
             break;
         case TOOL_SWAGGER_BALLERINA:
-            processToolsSwaggerBallerina(version, createPullRequests);
+            processToolsSwaggerBallerina(repository, version, createPullRequests);
             break;
         case TOOLS_DISTRIBUTION:
-            processToolsDistribution(version, createPullRequests);
+            processToolsDistribution(repository, version, createPullRequests);
             break;
     }
 };
@@ -211,21 +210,21 @@ let createPullRequest = function (message) {
     executeCommand(command);
 };
 
-let processLanguageServer = function (version, createPullRequests) {
+let processLanguageServer = function (repository, version, createPullRequests) {
     if (!checkSourceDirectory(SOURCE_ROOT)) {
         console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(SOURCE_ROOT) + chalk.red(" directory."));
         console.log(chalk.red("Please clone required repos to ") + chalk.bold.red("./sources/")
             + chalk.red(" directory. View README for more details."));
         return;
     }
-    if (shell.cd(LANGUAGE_SERVER).code !== 0) {
-        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(LANGUAGE_SERVER) + chalk.red(" directory."));
-        console.log(chalk.red("Please clone ") + chalk.bold.red(LANGUAGE_SERVER) + chalk.red(" repo."));
+    if (shell.cd(repository).code !== 0) {
+        console.log(chalk.red("Failed to navigate to ") + chalk.bold.red(repository) + chalk.red(" directory."));
+        console.log(chalk.red("Please clone ") + chalk.bold.red(repository) + chalk.red(" repo."));
         return;
     }
 
     const RELEASE_BRANCH = `release-${version}`;
-    const PATCH_LOCATION = `${PATCH_ROOT}/${LANGUAGE_SERVER}.patch`;
+    const PATCH_LOCATION = `${PATCH_ROOT}/${repository}.patch`;
 
     if (!fetchUpstream()) {
         return;
@@ -249,35 +248,35 @@ let processLanguageServer = function (version, createPullRequests) {
         return;
     }
     if (createPullRequests) {
-        createPullRequest("Revert property values");
+        createPullRequest(PR_MSG);
     }
-    console.log(chalk.green("\nProcessing ") + chalk.bold.green(LANGUAGE_SERVER) + chalk.green(" completed successfully."))
+    console.log(chalk.green("\nProcessing ") + chalk.bold.green(repository) + chalk.green(" completed successfully."))
 };
 
-let processDocerina = function (version, createPullRequests) {
+let processDocerina = function (repository, version, createPullRequests) {
     console.log("processDocerina");
 };
 
-let processPluginMaven = function (version, createPullRequests) {
+let processPluginMaven = function (repository, version, createPullRequests) {
     console.log("processPluginMaven");
 };
 
-let processComposer = function (version, createPullRequests) {
+let processComposer = function (repository, version, createPullRequests) {
     console.log("processComposer");
 };
 
-let processTesterina = function (version, createPullRequests) {
+let processTesterina = function (repository, version, createPullRequests) {
     console.log("processTesterina");
 };
 
-let processContainerSupport = function (version, createPullRequests) {
+let processContainerSupport = function (repository, version, createPullRequests) {
     console.log("processContainerSupport");
 };
 
-let processToolsSwaggerBallerina = function (version, createPullRequests) {
+let processToolsSwaggerBallerina = function (repository, version, createPullRequests) {
     console.log("processToolsSwaggerBallerina");
 };
 
-let processToolsDistribution = function (version, createPullRequests) {
+let processToolsDistribution = function (repository, version, createPullRequests) {
     console.log("processToolsDistribution");
 };
