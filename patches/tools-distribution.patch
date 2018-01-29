@@ -15,12 +15,12 @@ index 83235b8..d6f1efd 100644
      </modules>
  
      <properties>
--        <ballerina.runtime.version>0.95.10-SNAPSHOT</ballerina.runtime.version>
--        <ballerina.composer.version>0.95.10-SNAPSHOT</ballerina.composer.version>
--        <testerina.version>0.95.10-SNAPSHOT</testerina.version>
--        <tool.swagger.version>0.95.10-SNAPSHOT</tool.swagger.version>
--        <ballerina.container.version>0.95.10-SNAPSHOT</ballerina.container.version>
--        <docerina.version>0.95.10-SNAPSHOT</docerina.version>
+-        <ballerina.runtime.version>0.96.2-SNAPSHOT</ballerina.runtime.version>
+-        <ballerina.composer.version>0.96.2-SNAPSHOT</ballerina.composer.version>
+-        <testerina.version>0.96.2-SNAPSHOT</testerina.version>
+-        <tool.swagger.version>0.96.2-SNAPSHOT</tool.swagger.version>
+-        <ballerina.container.version>0.96.2-SNAPSHOT</ballerina.container.version>
+-        <docerina.version>0.96.2-SNAPSHOT</docerina.version>
 +        <ballerina.runtime.version>${project.version}</ballerina.runtime.version>
 +        <ballerina.composer.version>${ballerina.runtime.version}</ballerina.composer.version>
 +        <testerina.version>${ballerina.runtime.version}</testerina.version>

@@ -15,7 +15,7 @@ index e316709..f1348c2 100644
      </build>
  
      <properties>
--        <ballerina.version>0.95.10-SNAPSHOT</ballerina.version>
+-        <ballerina.version>0.96.2-SNAPSHOT</ballerina.version>
 +        <ballerina.version>${project.version}</ballerina.version>
          <project.scm.id>my-scm-server</project.scm.id>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
