@@ -37,7 +37,7 @@ inquirer
         {
             type: 'input',
             name: 'version',
-            message: "Enter Ballerina version (x.x.x): ",
+            message: "Enter Ballerina version which you want to update release branch (x.x.x): ",
             validate: function (value) {
                 var pass = value.match(
                     /^\d+\.\d+.\d$/i
